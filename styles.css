@@ -305,3 +305,135 @@ body{background:#0b1015}
   }
   .hero { padding-top:0; }
 }
+
+/* === 15.10.2026: ПК — матова навігаційна плашка над банером;
+   мобільний — гола іконка бургера в кутку фото.
+   Заголовок зверху, опис зліва внизу, CTA справа внизу. === */
+@media (min-width: 851px) {
+  .site-header { position:relative; z-index:20; padding-bottom:0; }
+  .brand { margin-bottom:20px; }
+  .header-bottom {
+    position:relative; top:auto; left:auto; right:auto;
+    width:100%; min-height:59px; margin:0 auto 18px;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:auto;
+  }
+  .main-nav { flex:0 0 auto; }
+  .hero { padding-top:0; }
+  .hero-stage { margin-top:0; }
+  .hero-ctas .btn { min-height:51px; }
+}
+
+/* Меню-бургер без підкладки на фото; іконки залишаються у верхньому правому куті. */
+@media (max-width: 850px) {
+  .brand { margin-bottom:14px; }
+  .site-header { position:relative; z-index:30; }
+  .header-bottom {
+    position:absolute; top:calc(100% + 14px);
+    left:clamp(13px,4vw,24px); right:clamp(13px,4vw,24px);
+    min-height:45px; width:auto; margin:0;
+    display:flex; flex-direction:row; justify-content:space-between; align-items:center;
+    pointer-events:none;
+  }
+  .header-bottom .main-nav, .header-bottom .header-actions { pointer-events:auto; }
+  .main-nav {
+    width:auto; min-width:0; flex:0 0 auto; display:block;
+    padding:0; border:0; border-radius:0; background:transparent;
+    -webkit-backdrop-filter:none; backdrop-filter:none;
+    box-shadow:none; overflow:visible; color:#fff;
+  }
+  .menu-toggle {
+    min-width:0; width:43px; height:43px; min-height:43px;
+    padding:10px; gap:0; border-radius:10px; color:#fff;
+    background:transparent; border:0;
+    filter:drop-shadow(0 1px 3px rgba(0,0,0,.8));
+  }
+  .menu-toggle:hover,.menu-toggle.is-open { background:rgba(7,20,33,.36); }
+  .menu-toggle .menu-toggle-label { display:none; }
+  .burger-lines { width:25px; height:22px; gap:6px; }
+  .burger-lines span { height:2px; }
+  .menu-toggle.is-open .burger-lines span:nth-child(1) { transform:translateY(8px) rotate(45deg); }
+  .menu-toggle.is-open .burger-lines span:nth-child(3) { transform:translateY(-8px) rotate(-45deg); }
+  .header-actions {
+    position:static; top:auto; right:auto; align-self:center;
+    transform:none; margin:0; display:flex; align-items:center; gap:9px;
+    color:#fff;
+    filter:drop-shadow(0 1px 3px rgba(0,0,0,.6));
+  }
+  .nav-dropdown {
+    position:absolute; left:0; top:calc(100% + 9px);
+    transform:none; width:min(245px, calc(100vw - 42px));
+    max-width:calc(100vw - 42px);
+    background:rgba(234,242,252,.94);
+    -webkit-backdrop-filter:blur(24px) saturate(145%);
+    backdrop-filter:blur(24px) saturate(145%);
+    box-shadow:0 18px 45px rgba(0,0,0,.42);
+  }
+  .hero { padding-top:0; }
+  .hero-stage { margin-top:0; }
+
+  /* Один верхній та один нижній інформаційний ярус — як на ескізі. */
+  .hero-content {
+    grid-column:1; grid-row:1; position:relative; z-index:2;
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(118px,.72fr);
+    grid-template-rows:auto auto minmax(0,1fr) auto;
+    align-self:stretch; justify-self:stretch;
+    width:100%; height:100%; max-width:none;
+    padding:clamp(88px,12vw,108px) clamp(22px,4vw,36px) 28px;
+    gap:0 12px;
+  }
+  .hero-content .eyebrow { grid-column:1/-1; grid-row:1; align-self:end; }
+  .hero-content h1 {
+    grid-column:1/-1; grid-row:2; align-self:start;
+    margin:12px 0 0; max-width:100%;
+    font-size:clamp(41px,6vw,57px);
+    letter-spacing:-.052em; line-height:1.08;
+    text-shadow:0 2px 14px rgba(0,0,0,.55);
+  }
+  .hero-content .hero-lead {
+    grid-column:1; grid-row:4; align-self:end;
+    max-width:none; margin:0; padding:0 0 3px;
+    font-size:clamp(12px,1.7vw,15px); line-height:1.45;
+    color:#f3f6fa; text-shadow:0 2px 8px #000b;
+  }
+  .hero-content .hero-ctas {
+    grid-column:2; grid-row:4; align-self:end;
+    display:flex; flex-wrap:nowrap; justify-content:flex-end;
+    margin:0; padding:0;
+  }
+  .hero-ctas .btn-primary {
+    min-height:47px; width:100%; min-width:0; padding:10px 11px;
+    display:flex; justify-content:center; gap:8px;
+    font-size:11px; white-space:nowrap;
+  }
+  .hero-ctas .btn-primary svg { flex:0 0 auto; width:18px; height:18px; }
+  .hero-stage::before {
+    background:
+      linear-gradient(180deg,rgba(5,12,21,.65) 0%,rgba(7,16,27,.24) 32%,transparent 46%),
+      linear-gradient(0deg,rgba(5,11,19,.88) 0%,rgba(5,11,19,.40) 22%,transparent 49%);
+  }
+}
+@media (max-width: 650px) {
+  .hero-stage { height:clamp(540px,153vw,660px); }
+  .hero-content {
+    padding:92px 20px 31px;
+    grid-template-columns:minmax(0,1fr) 127px;
+    column-gap:13px;
+  }
+  .hero-content h1 { font-size:clamp(37px,9.1vw,49px); }
+  .hero-content .hero-lead { font-size:12px; line-height:1.42; }
+  .hero-ctas .btn-primary { min-height:45px; font-size:10px; }
+}
+@media (max-width: 370px) {
+  .hero-stage { height:clamp(545px,165vw,625px); }
+  .hero-content {
+    padding:83px 14px 25px;
+    grid-template-columns:minmax(0,1fr) 118px;
+    column-gap:8px;
+  }
+  .hero-content h1 { font-size:clamp(33px,9.2vw,37px); }
+  .hero-content .eyebrow { font-size:9px; letter-spacing:.1em; }
+  .hero-content .hero-lead { font-size:11px; }
+  .hero-ctas .btn-primary { padding:9px 6px; font-size:9px; gap:5px; }
+  .header-actions { gap:5px; }
+}
