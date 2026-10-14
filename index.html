@@ -51,11 +51,17 @@
       <a class="brand" href="#top" aria-label="MARQ, на головну"><span class="brand-prefix">GARMIN</span><strong>MARQ</strong><span class="brand-generation">GEN 3 COLLECTION</span></a>
       <div class="header-bottom">
         <nav class="main-nav" aria-label="Основне меню">
-          <a class="nav-item is-current" href="#top"><svg class="nav-home"><use href="#i-home"/></svg><span>Головна</span></a>
-          <a class="nav-item" href="#collection">Колекція</a>
-          <button class="nav-item" type="button" data-topic="innovations">Технології</button>
-          <button class="nav-item" type="button" data-action="compare">Порівняти</button>
-          <button class="nav-item" type="button" data-topic="story">Про MARQ</button>
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-dropdown" aria-label="Відкрити меню">
+            <span class="burger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="menu-toggle-label">Меню</span>
+          </button>
+          <div class="nav-dropdown" id="nav-dropdown" hidden>
+            <a class="nav-item is-current" href="#top"><svg class="nav-home"><use href="#i-home"/></svg><span>Головна</span></a>
+            <a class="nav-item" href="#collection">Колекція</a>
+            <button class="nav-item" type="button" data-topic="innovations">Технології</button>
+            <button class="nav-item" type="button" data-action="compare">Порівняти</button>
+            <button class="nav-item" type="button" data-topic="story">Про MARQ</button>
+          </div>
         </nav>
         <div class="header-actions">
           <button class="icon-button" type="button" aria-label="Пошук моделей" title="Пошук (Ctrl+K)" data-action="search"><svg><use href="#i-search"/></svg></button>
@@ -77,12 +83,7 @@
             <button class="btn-video" type="button" data-topic="story"><span class="play-circle">▶</span><span>Історія MARQ<small>Філософія колекції</small></span></button>
           </div>
         </div>
-        <div class="hero-stage" aria-label="Garmin MARQ Adventurer Gen 3" id="hero-stage">
-          <div class="stage-rings"></div><div class="stage-spotlight"></div>
-          <img class="hero-watch" id="hero-watch" src="assets/adventurer-slider.webp" alt="Іміджевий банер колекції Garmin MARQ Gen 3, слайд 1" width="960" height="700" fetchpriority="high" decoding="async">
-          <div class="pedestal"><span></span></div>
-          <div class="stage-caption" id="stage-caption">MARQ ADVENTURER <span>·</span> GEN 3</div>
-        </div>
+        <div class="hero-stage" aria-label="Іміджевий банер Garmin MARQ Adventurer Gen 3" role="img" id="hero-stage"></div>
         <div class="hero-slider-controls" aria-label="Керування слайдером Garmin MARQ">
           <button class="slider-arrow" type="button" data-slide-direction="-1" aria-label="Попередній банер">‹</button>
           <div class="slider-dots" id="slider-dots" role="group" aria-label="Оберіть модель">
