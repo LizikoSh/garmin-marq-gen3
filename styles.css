@@ -116,3 +116,10 @@ body{background:#0b1015}
 /* Власні заголовки H3 карток для SEO та доступності без зміни дизайну. */
 .card-info h3{font-size:16px;letter-spacing:-.03em;margin:0;line-height:1.35}
 @media(max-width:650px){.card-info h3{font-size:14px}}
+
+/* Окремі WebP-банери для слайдера: без нахилу, з коректним масштабуванням. */
+.hero-stage .hero-watch{top:0;left:0;width:100%;height:100%;object-fit:contain;transform:none;filter:none}
+/* Резервне PNG — попередня візуалізація годинника, якщо банер ще не завантажений. */
+.hero-stage .hero-watch.hero-watch-fallback{top:-5%;left:12%;width:84%;height:90%;object-fit:contain;transform:rotate(-7deg);filter:drop-shadow(10px 26px 25px rgba(0,0,0,.54))}
+@media(max-width:850px){.hero-stage .hero-watch.hero-watch-fallback{left:4%;width:100%}}
+@media(max-width:650px){.hero-stage .hero-watch.hero-watch-fallback{top:-20%;left:12%;width:78%;height:124%}}

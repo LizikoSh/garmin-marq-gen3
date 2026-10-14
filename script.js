@@ -14,6 +14,16 @@ const imageFiles = {
   golfer: 'golf-Photoroom.png',
 };
 const productImage = model => `assets/${imageFiles[model.id]}`;
+// Банери головного слайдера мають окремі файли. PNG карток і модальних вікон незмінні.
+const bannerImageFiles = {
+  adventurer: 'garmin-marq-3-adventurer-banner-slider.webp',
+  athlete: 'garmin-marq-3-athlete-banner-slider.webp',
+  aviator: 'garmin-marq-3-aviator-banner-slider.webp',
+  commander: 'garmin-marq-3-commander-banner-slider.webp',
+  diver: 'garmin-marq-3-diver-banner-slider.webp',
+  golfer: 'garmin-marq-3-golfer-banner-slider.webp'
+};
+const bannerImage = model => `assets/${bannerImageFiles[model.id]}`;
 const models = [
   {id:'adventurer', name:'Adventurer', subtitle:'Для відкриттів і нових маршрутів', series:'ЕКСПЕДИЦІЇ', code:'010-04549-00', glow:'#6889ad35', intro:'Преміальний інструмент для тих, хто завжди шукає наступний маршрут: від міських подорожей до складних гірських стежок.', style:'Повнозерниста італійська шкіра, керамічний безель з компасними позначками на 360°.', features:['Багатошарова картографія й навігація','Компасні позначки на безелі','ClimbPro: підйоми на маршруті без обов’язкового попереднього планування','Герметичні кнопки й преміальні матеріали'], audience:'Мандрівникам, дослідникам, шанувальникам outdoor', price:'$2 700'},
   {id:'athlete', name:'Athlete', subtitle:'Для нових спортивних вершин', series:'СПОРТ', code:'010-04549-10', glow:'#5e90ba39', intro:'Спортивний характер MARQ: інструменти для тренувань, витривалості, аналізу прогресу та підготовки до наступного старту.', style:'Силіконовий ремінець, керамічний безель із позначенням VO₂ max.', features:['Поглиблені показники витривалості','Running Economy: ефективність бігу','Аналітика тренувань та відновлення','Спортивний силіконовий ремінець'], audience:'Бігунам, спортсменам на витривалість і мультиспортсменам', price:'$2 500'},
@@ -49,7 +59,7 @@ const byId = id => models.find(m=>m.id===id);
 function save(){try{localStorage.setItem(storageKey,JSON.stringify(preferences));}catch(_){} updateCounts();}
 function updateCounts(){[['favorite-count','favorites'],['compare-count','compare']].forEach(([element,key])=>{const el=$('#'+element);el.textContent=preferences[key].length;el.hidden=!preferences[key].length;});document.querySelectorAll('[data-favorite]').forEach(b=>{const active=preferences.favorites.includes(b.dataset.favorite);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));b.setAttribute('aria-label',(active?'Вилучити з обраного: ':'Додати в обране: ')+byId(b.dataset.favorite).name);});document.querySelectorAll('[data-compare-toggle]').forEach(b=>{const active=preferences.compare.includes(b.dataset.compareToggle);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));b.title=active?'Вилучити з порівняння':'Додати до порівняння';});}
 function renderCards(){grid.innerHTML=models.map(m=>`<article class="product-card" id="model-${m.id}" style="--watch-glow:${m.glow}"><button class="card-open" type="button" data-product="${m.id}" aria-label="Відкрити деталі MARQ ${m.name}"><div class="card-art"><span class="card-typeline">MARQ · GEN 3</span><img src="${productImage(m)}" alt="Garmin MARQ ${m.name} (Gen 3)" loading="lazy"></div><div class="card-info"><h3>${m.name}</h3><small>${m.subtitle}</small><span class="card-bottom">Детальніше ${icons('i-arrow')}</span></div></button><button class="card-compare" type="button" data-compare-toggle="${m.id}" aria-label="Додати MARQ ${m.name} до порівняння" title="Додати до порівняння">＋</button><button class="card-fav" type="button" data-favorite="${m.id}" aria-label="Додати MARQ ${m.name} в обране" title="Обране">${icons('i-heart')}</button></article>`).join('');updateCounts();}
-// Слайдер із шести моделей: ті самі локальні PNG, що в картках та модальних вікнах.
+// Слайдер із шести моделей: окремі WebP-банери з папки assets/.
 const heroSlides = [
   {id:'adventurer',name:'За межами звичного',first:'За межами',accent:'звичного.',category:'ЕКСПЕДИЦІЇ / MARQ GEN 3',lead:'MARQ Adventurer: для тих, хто обирає нові маршрути та відкриття.'},
   {id:'athlete',name:'Рух до більшого',first:'Рух до',accent:'більшого.',category:'СПОРТ / MARQ GEN 3',lead:'MARQ Athlete: кожен старт починається з амбіцій, підкріплених даними.'},
@@ -58,28 +68,42 @@ const heroSlides = [
   {id:'diver',name:'Глибше за очікування',first:'Глибше за',accent:'очікування.',category:'ДАЙВІНГ / MARQ GEN 3',lead:'MARQ Diver: технології, що допомагають досліджувати підводний світ.'},
   {id:'golfer',name:'Точність кожного рішення',first:'Точність кожного',accent:'рішення.',category:'ГОЛЬФ / MARQ GEN 3',lead:'MARQ Golfer: коли кожен удар — продумане рішення.'}
 ];
-let heroIndex=0,heroTimer=null,heroPaused=false;
+let heroIndex=0,heroTimer=null,heroPaused=false,heroRequest=0;
 const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 function showHeroSlide(index){
   heroIndex=(index+heroSlides.length)%heroSlides.length;
-  const slide=heroSlides[heroIndex], model=byId(slide.id), stage=$('#hero-stage'), img=$('#hero-watch');
+  const currentIndex=heroIndex, requestId=++heroRequest;
+  const slide=heroSlides[currentIndex], model=byId(slide.id), stage=$('#hero-stage'), img=$('#hero-watch');
+  const requestedSrc=bannerImage(model);
   $('.hero').classList.add('slide-switching');
-  const nextImg=new Image();nextImg.src=productImage(model);
-  const update=()=>{
+  const update=(loadedSrc)=>{
+    // Застаріле асинхронне завантаження не повинно замінити новий слайд.
+    if(requestId!==heroRequest)return;
     $('#hero-title').innerHTML=`${slide.first}<br><em>${slide.accent}</em>`;
     $('.hero .eyebrow span').textContent=slide.category;
     $('#hero-lead').textContent=slide.lead;
-    img.src=productImage(model); img.alt=`Garmin MARQ ${model.name} (Gen 3)`;
+    img.classList.toggle('hero-watch-fallback',loadedSrc!==requestedSrc);
+    img.alt=`Банер Garmin MARQ ${model.name} (Gen 3)`;
+    img.onerror=()=>{
+      img.onerror=null;
+      img.classList.add('hero-watch-fallback');
+      img.src=productImage(model);
+    };
+    img.src=loadedSrc;
     stage.setAttribute('aria-label',`Garmin MARQ ${model.name} Gen 3`);
     $('#stage-caption').innerHTML=`MARQ ${model.name.toUpperCase()} <span>·</span> GEN 3`;
-    $('#slide-counter').textContent=`${String(heroIndex+1).padStart(2,'0')} / 06`;
+    $('#slide-counter').textContent=`${String(currentIndex+1).padStart(2,'0')} / 06`;
     document.querySelectorAll('.slider-dot').forEach((dot,i)=>{
-      dot.classList.toggle('is-active',i===heroIndex);
-      if(i===heroIndex)dot.setAttribute('aria-current','true');else dot.removeAttribute('aria-current');
+      dot.classList.toggle('is-active',i===currentIndex);
+      if(i===currentIndex)dot.setAttribute('aria-current','true');else dot.removeAttribute('aria-current');
     });
     $('.hero').classList.remove('slide-switching');
   };
-  if(nextImg.complete)update();else {nextImg.onload=update;nextImg.onerror=update;}
+  const preloaded=new Image();
+  preloaded.onload=()=>update(requestedSrc);
+  preloaded.onerror=()=>update(productImage(model));
+  preloaded.src=requestedSrc;
+  if(preloaded.complete&&preloaded.naturalWidth>0)update(requestedSrc);
 }
 function stopHeroAuto(){if(heroTimer){clearInterval(heroTimer);heroTimer=null;}}
 function startHeroAuto(){stopHeroAuto();if(heroPaused||reduceMotion.matches||document.hidden||dialog.open)return;heroTimer=setInterval(()=>showHeroSlide(heroIndex+1),6500);}
@@ -95,6 +119,7 @@ $('#slider-toggle').addEventListener('click',e=>{
   e.currentTarget.setAttribute('aria-label',heroPaused?'Увімкнути автоматичне гортання':'Зупинити автоматичне гортання');
   e.currentTarget.textContent=heroPaused?'▶':'Ⅱ';heroPaused?stopHeroAuto():startHeroAuto();
 });
+showHeroSlide(0);
 startHeroAuto();
 
 // Без скролу: весь зміст розбитий на окремі екрани із кнопками «Назад»/«Далі».
