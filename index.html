@@ -3,12 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#20252b">
+  <meta name="theme-color" content="#111820">
+  <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="description" content="Garmin MARQ (Gen 3) — шість преміальних смартгодинників: Adventurer, Athlete, Aviator, Commander, Diver, Golfer. Огляд колекції, функцій і характеристик.">
-  <title>MARQ (Gen 3) — мистецтво можливого | Garmin</title>
+  <title>Garmin MARQ Gen 3 — шість преміальних смартгодинників | Колекція 2026</title>
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="uk_UA">
+  <meta property="og:site_name" content="GARMIN MARQ Gen 3 Collection">
+  <meta property="og:title" content="Garmin MARQ Gen 3 — колекція шести преміальних годинників">
+  <meta property="og:description" content="Від Adventurer до Golfer: познайомтеся з усіма шістьма моделями Garmin MARQ третього покоління, особливостями та технологіями.">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Garmin MARQ Gen 3 — колекція 2026">
+  <meta name="twitter:description" content="Шість моделей MARQ Gen 3: дизайн, призначення, ключові технології та порівняння.">
+  <!-- Canonical і og:url додайте, коли відома остаточна публічна адреса (див. README). -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"Garmin MARQ Gen 3 — колекція 2026","inLanguage":"uk-UA","description":"Інформаційна презентація шести преміальних годинників Garmin MARQ третього покоління.","about":{"@type":"Thing","name":"Garmin MARQ Gen 3"},"mainEntity":{"@type":"ItemList","numberOfItems":6,"itemListElement":[{"@type":"ListItem","position":1,"name":"Garmin MARQ Adventurer (Gen 3)"},{"@type":"ListItem","position":2,"name":"Garmin MARQ Athlete (Gen 3)"},{"@type":"ListItem","position":3,"name":"Garmin MARQ Aviator (Gen 3)"},{"@type":"ListItem","position":4,"name":"Garmin MARQ Commander (Gen 3)"},{"@type":"ListItem","position":5,"name":"Garmin MARQ Diver (Gen 3)"},{"@type":"ListItem","position":6,"name":"Garmin MARQ Golfer (Gen 3)"}]}}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -51,19 +65,33 @@
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-aurora" aria-hidden="true"></div>
         <div class="hero-content">
-          <div class="eyebrow"><span>НОВА КОЛЕКЦІЯ / 2026</span><i></i></div>
-          <h1 id="hero-title">Ваша висота.<br>Ваш <em>MARQ.</em></h1>
-          <p class="hero-lead">Точність, що стає мистецтвом. Шість характерів. Один стандарт досконалості.</p>
+          <div class="eyebrow"><span>ЕКСПЕДИЦІЇ / MARQ GEN 3</span><i></i></div>
+          <h1 id="hero-title">За межами<br><em>звичного.</em></h1>
+          <p class="hero-lead" id="hero-lead">MARQ Adventurer: для тих, хто обирає нові маршрути та відкриття.</p>
           <div class="hero-ctas">
-            <a class="btn btn-primary" href="#collection">ДО КОЛЕКЦІЇ <svg><use href="#i-arrow"/></svg></a>
+            <button class="btn btn-primary" type="button" data-action="hero-details">ПРО МОДЕЛЬ <svg><use href="#i-arrow"/></svg></button>
             <button class="btn-video" type="button" data-topic="story"><span class="play-circle">▶</span><span>Історія MARQ<small>Філософія колекції</small></span></button>
           </div>
         </div>
-        <div class="hero-stage" aria-label="Garmin MARQ Athlete Gen 3">
+        <div class="hero-stage" aria-label="Garmin MARQ Adventurer Gen 3" id="hero-stage">
           <div class="stage-rings"></div><div class="stage-spotlight"></div>
-          <img class="hero-watch" src="assets/athlete-Photoroom.png" alt="Garmin MARQ Athlete (Gen 3)" width="600" height="700">
+          <img class="hero-watch" id="hero-watch" src="assets/adventurer-Photoroom.png" alt="Garmin MARQ Adventurer (Gen 3)" width="600" height="700" fetchpriority="high" decoding="async">
           <div class="pedestal"><span></span></div>
-          <div class="stage-caption">MARQ ATHLETE <span>·</span> GEN 3</div>
+          <div class="stage-caption" id="stage-caption">MARQ ADVENTURER <span>·</span> GEN 3</div>
+        </div>
+        <div class="hero-slider-controls" aria-label="Керування слайдером Garmin MARQ">
+          <button class="slider-arrow" type="button" data-slide-direction="-1" aria-label="Попередній банер">‹</button>
+          <div class="slider-dots" id="slider-dots" role="group" aria-label="Оберіть модель">
+            <button type="button" class="slider-dot is-active" data-slide="0" aria-label="Слайд 1: Adventurer" aria-current="true"></button>
+            <button type="button" class="slider-dot" data-slide="1" aria-label="Слайд 2: Athlete"></button>
+            <button type="button" class="slider-dot" data-slide="2" aria-label="Слайд 3: Aviator"></button>
+            <button type="button" class="slider-dot" data-slide="3" aria-label="Слайд 4: Commander"></button>
+            <button type="button" class="slider-dot" data-slide="4" aria-label="Слайд 5: Diver"></button>
+            <button type="button" class="slider-dot" data-slide="5" aria-label="Слайд 6: Golfer"></button>
+          </div>
+          <button class="slider-arrow" type="button" data-slide-direction="1" aria-label="Наступний банер">›</button>
+          <button class="slider-pause" type="button" id="slider-toggle" aria-label="Зупинити автоматичне гортання" aria-pressed="false">Ⅱ</button>
+          <span class="slide-counter" id="slide-counter" aria-live="off">01 / 06</span>
         </div>
         <div class="hero-benefits" aria-label="Ключові особливості">
           <div class="benefit"><span class="benefit-icon"><svg><use href="#i-shield"/></svg></span><span>Титан Grade 5<small>Сапфірове скло</small></span></div>
@@ -76,7 +104,14 @@
       <section class="collection-section" id="collection" aria-labelledby="collection-title">
         <div class="section-top"><div><div class="eyebrow small"><span>ОБЕРІТЬ СВІЙ ХАРАКТЕР</span></div><h2 id="collection-title">Шість граней <em>MARQ.</em></h2></div><button type="button" class="text-link" data-action="compare">Порівняти моделі <span>↗</span></button></div>
         <div class="filterbar"><p>Кожна модель створена для своєї стихії. Відкрийте картку, щоб побачити деталі.</p><span class="count-label">06 / 06</span></div>
-        <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        <div class="product-grid" id="product-grid" aria-live="polite">
+          <article class="product-card" id="model-adventurer"><div class="card-art"><img src="assets/adventurer-Photoroom.png" alt="Garmin MARQ Adventurer Gen 3 — преміальний смартгодинник" loading="lazy" width="280" height="300"></div><div class="card-info"><h3>Adventurer</h3><p>Для відкриттів і нових маршрутів</p><a href="https://www.garmin.com/en-US/c/sports-fitness/luxury-smartwatches/" rel="noopener" target="_blank">Офіційна колекція Garmin ↗</a></div></article>
+          <article class="product-card" id="model-athlete"><div class="card-art"><img src="assets/athlete-Photoroom.png" alt="Garmin MARQ Athlete Gen 3 — преміальний смартгодинник" loading="lazy" width="280" height="300"></div><div class="card-info"><h3>Athlete</h3><p>Для нових спортивних вершин</p><a href="https://www.garmin.com/en-US/c/sports-fitness/luxury-smartwatches/" rel="noopener" target="_blank">Офіційна колекція Garmin ↗</a></div></article>
+          <article class="product-card" id="model-aviator"><div class="card-art"><img src="assets/aviator-Photoroom.png" alt="Garmin MARQ Aviator Gen 3 — преміальний смартгодинник" loading="lazy" width="280" height="300"></div><div class="card-info"><h3>Aviator</h3><p>Для життя над горизонтом</p><a href="https://www.garmin.com/en-US/c/sports-fitness/luxury-smartwatches/" rel="noopener" target="_blank">Офіційна колекція Garmin ↗</a></div></article>
+          <article class="product-card" id="model-commander"><div class="card-art"><img src="assets/commander-Photoroom.png" alt="Garmin MARQ Commander Gen 3 — преміальний смартгодинник" loading="lazy" width="280" height="300"></div><div class="card-info"><h3>Commander</h3><p>Для максимальної готовності</p><a href="https://www.garmin.com/en-US/c/sports-fitness/luxury-smartwatches/" rel="noopener" target="_blank">Офіційна колекція Garmin ↗</a></div></article>
+          <article class="product-card" id="model-diver"><div class="card-art"><img src="assets/diver-Photoroom.png" alt="Garmin MARQ Diver Gen 3 — преміальний смартгодинник" loading="lazy" width="280" height="300"></div><div class="card-info"><h3>Diver</h3><p>Для нових глибин і відкриттів</p><a href="https://www.garmin.com/en-US/c/sports-fitness/luxury-smartwatches/" rel="noopener" target="_blank">Офіційна колекція Garmin ↗</a></div></article>
+          <article class="product-card" id="model-golfer"><div class="card-art"><img src="assets/golf-Photoroom.png" alt="Garmin MARQ Golfer Gen 3 — преміальний смартгодинник" loading="lazy" width="280" height="300"></div><div class="card-info"><h3>Golfer</h3><p>Для кожного точного удару</p><a href="https://www.garmin.com/en-US/c/sports-fitness/luxury-smartwatches/" rel="noopener" target="_blank">Офіційна колекція Garmin ↗</a></div></article>
+        </div>
       </section>
 
       <section class="feature-banner" aria-labelledby="feature-title">
@@ -94,7 +129,7 @@
     <footer class="footer"><div class="footer-main"><div><strong>MARQ <span>GEN 3</span></strong><p>Демонстраційний концепт сайту про нову колекцію Garmin. Неофіційна сторінка та не інтернет-магазин.</p></div><div class="footer-links"><button type="button" data-topic="sources">Джерела</button><button type="button" data-topic="restrictions">Застереження</button><a href="https://www.garmin.com/en-US/c/sports-fitness/luxury-smartwatches/" target="_blank" rel="noopener noreferrer">Garmin.com ↗</a></div></div><div class="footer-bottom"><span>© 2026 MARQ Gen 3 · Дизайн-концепт</span><span>* Наявність функцій і покриття залежать від регіону та тарифу.</span></div></footer>
   </div>
 
-  <dialog id="info-dialog" class="modal" aria-labelledby="modal-title"><div class="modal-layout"><div class="modal-header"><div><div class="modal-kicker" id="modal-kicker">GARMIN MARQ</div><h2 id="modal-title"></h2></div><button type="button" class="modal-close" aria-label="Закрити вікно" data-action="close"><svg><use href="#i-close"/></svg></button></div><div id="modal-body" class="modal-body"></div></div></dialog>
+  <dialog id="info-dialog" class="modal" aria-labelledby="modal-title"><div class="modal-layout"><div class="modal-header"><div><div class="modal-kicker" id="modal-kicker">GARMIN MARQ</div><h2 id="modal-title"></h2></div><button type="button" class="modal-close" aria-label="Закрити вікно" data-action="close"><svg><use href="#i-close"/></svg></button></div><div id="modal-body" class="modal-body"></div><div class="modal-pager" id="modal-pager" hidden><button type="button" class="pager-control" data-action="modal-prev" aria-label="Попередня сторінка модального вікна">← Назад</button><span id="modal-page-info" aria-live="polite">1 / 1</span><button type="button" class="pager-control" data-action="modal-next" aria-label="Наступна сторінка модального вікна">Далі →</button></div></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

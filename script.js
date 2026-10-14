@@ -48,22 +48,127 @@ const list = items => `<ul>${items.map(item=>`<li>${item}</li>`).join('')}</ul>`
 const byId = id => models.find(m=>m.id===id);
 function save(){try{localStorage.setItem(storageKey,JSON.stringify(preferences));}catch(_){} updateCounts();}
 function updateCounts(){[['favorite-count','favorites'],['compare-count','compare']].forEach(([element,key])=>{const el=$('#'+element);el.textContent=preferences[key].length;el.hidden=!preferences[key].length;});document.querySelectorAll('[data-favorite]').forEach(b=>{const active=preferences.favorites.includes(b.dataset.favorite);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));b.setAttribute('aria-label',(active?'Вилучити з обраного: ':'Додати в обране: ')+byId(b.dataset.favorite).name);});document.querySelectorAll('[data-compare-toggle]').forEach(b=>{const active=preferences.compare.includes(b.dataset.compareToggle);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));b.title=active?'Вилучити з порівняння':'Додати до порівняння';});}
-function renderCards(){grid.innerHTML=models.map(m=>`<article class="product-card" style="--watch-glow:${m.glow}"><button class="card-open" type="button" data-product="${m.id}" aria-label="Відкрити деталі MARQ ${m.name}"><div class="card-art"><span class="card-typeline">MARQ · GEN 3</span><img src="${productImage(m)}" alt="Garmin MARQ ${m.name} (Gen 3)" loading="lazy"></div><div class="card-info"><strong>${m.name}</strong><small>${m.subtitle}</small><span class="card-bottom">Детальніше ${icons('i-arrow')}</span></div></button><button class="card-compare" type="button" data-compare-toggle="${m.id}" aria-label="Додати MARQ ${m.name} до порівняння" title="Додати до порівняння">＋</button><button class="card-fav" type="button" data-favorite="${m.id}" aria-label="Додати MARQ ${m.name} в обране" title="Обране">${icons('i-heart')}</button></article>`).join('');updateCounts();}
-function openModal(title,kicker,html){modalTitle.textContent=title;modalKicker.textContent=kicker;modalBody.innerHTML=html;if(!dialog.open) dialog.showModal();dialog.querySelector('.modal-layout').scrollTop=0;}
-function closeModal(){if(dialog.open)dialog.close();}
-function productModal(id){const m=byId(id);if(!m)return;openModal(`MARQ ${m.name}`,`GEN 3 / ${m.series}`,`<div class="product-modal-top"><div class="modal-art"><img src="${productImage(m)}" alt="Garmin MARQ ${m.name} (Gen 3)"></div><div><h3>Для тих, хто знає свою стихію.</h3><p>${m.intro}</p><div class="tag-list"><span class="tag">${m.code}</span><span class="tag">До 18 днів</span><span class="tag">1,4″ AMOLED</span></div><p><strong>Кому підійде:</strong> ${m.audience}.</p><p><strong>Стартова рекомендована ціна у США:</strong> ${m.price}.</p></div></div><h3>Що вирізняє модель</h3>${list(m.features)}<h3>Деталі дизайну</h3><p>${m.style}</p><h3>Спільні характеристики MARQ Gen 3</h3><div class="table-scroll"><table class="modal-table"><tbody>${common.map(([k,v])=>`<tr><th scope="row">${k}</th><td>${v}</td></tr>`).join('')}</tbody></table></div><div class="modal-actions"><button type="button" class="btn btn-primary" data-favorite="${m.id}">♡ ЗБЕРЕГТИ В ОБРАНЕ</button><button type="button" class="btn btn-outline" data-compare-toggle="${m.id}">＋ ПОРІВНЯТИ</button></div><p class="muted-note">* Зв’язок inReach залежить від країни, підписки й покриття. Ціна — MSRP для США на момент анонсу, не українська оферта. Фото годинника завантажується з локальної папки assets/.</p><p><a href="${GARMIN_COLLECTION}" target="_blank" rel="noopener noreferrer">Офіційна колекція MARQ на Garmin.com ↗</a></p>`);updateCounts();}
-function topicModal(id){const t=topics[id];if(t)openModal(t.title,t.kicker,t.html);}
-function compareModal(){const selected=preferences.compare.map(byId).filter(Boolean);const ms=selected.length?selected:models;const headers=ms.map(m=>`<th>${m.name}</th>`).join('');const rows=[['Призначення',m=>m.series],['Ремінець / стиль',m=>m.style],['Ключові функції',m=>m.features.slice(0,3).join(' · ')],['MSRP США',m=>m.price],['Автономність',m=>'До 18 днів']];openModal('Порівняння моделей',selected.length?`${selected.length} ОБРАНИХ ДЛЯ ПОРІВНЯННЯ`:'УСЯ КОЛЕКЦІЯ',`<p>${selected.length?'Порівнюються вибрані моделі.':'Показано всі шість моделей. Для власної добірки натискайте ＋ на картках.'}</p><div class="table-scroll"><table class="modal-table"><thead><tr><th>Критерій</th>${headers}</tr></thead><tbody>${rows.map(([title,fn])=>`<tr><th>${title}</th>${ms.map(m=>`<td>${fn(m)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="muted-note">У всіх моделях однакова базова технологічна платформа: AMOLED 1,4″, титан Grade 5, карти, LED-ліхтарик, inReach*.</p>${selected.length?'<button type="button" class="btn btn-outline" data-action="clear-compare">ОЧИСТИТИ ПОРІВНЯННЯ</button>':''}`);}
-function resultMarkup(m){return `<button type="button" class="result-item" data-product="${m.id}"><img src="${productImage(m)}" alt="Garmin MARQ ${m.name} (Gen 3)"><span><strong>MARQ ${m.name}</strong><small>${m.subtitle}</small></span><span class="right">↗</span></button>`;}
-function searchModal(){openModal('Знайти свій MARQ','ПОШУК ЗА НАЗВОЮ АБО МОЖЛИВОСТЯМИ',`<label class="stack" for="model-search">Введіть назву, сферу застосування або функцію</label><input class="search-field" id="model-search" type="search" autocomplete="off" placeholder="Наприклад: дайвінг, ClimbPro, спорт..."><div class="search-results" id="search-results">${models.map(resultMarkup).join('')}</div>`);const input=$('#model-search');input.focus();input.addEventListener('input',()=>{const q=input.value.trim().toLocaleLowerCase('uk');const matches=models.filter(m=>[m.name,m.subtitle,m.series,m.intro,m.audience,m.style,...m.features].join(' ').toLocaleLowerCase('uk').includes(q));$('#search-results').innerHTML=matches.length?matches.map(resultMarkup).join(''):'<div class="modal-empty">Нічого не знайдено. Спробуйте інший запит.</div>';});}
-function favoritesModal(){const ms=preferences.favorites.map(byId).filter(Boolean);openModal('Ваше обране','ЗБЕРЕЖЕНІ МОДЕЛІ',ms.length?`<p>Обрані моделі зберігаються в цьому браузері.</p><div class="modal-product-list">${ms.map(resultMarkup).join('')}</div>`:`<div class="modal-empty">Поки що порожньо. Натисніть ♡ на картці, щоб додати модель.</div>`);}
+function renderCards(){grid.innerHTML=models.map(m=>`<article class="product-card" id="model-${m.id}" style="--watch-glow:${m.glow}"><button class="card-open" type="button" data-product="${m.id}" aria-label="Відкрити деталі MARQ ${m.name}"><div class="card-art"><span class="card-typeline">MARQ · GEN 3</span><img src="${productImage(m)}" alt="Garmin MARQ ${m.name} (Gen 3)" loading="lazy"></div><div class="card-info"><h3>${m.name}</h3><small>${m.subtitle}</small><span class="card-bottom">Детальніше ${icons('i-arrow')}</span></div></button><button class="card-compare" type="button" data-compare-toggle="${m.id}" aria-label="Додати MARQ ${m.name} до порівняння" title="Додати до порівняння">＋</button><button class="card-fav" type="button" data-favorite="${m.id}" aria-label="Додати MARQ ${m.name} в обране" title="Обране">${icons('i-heart')}</button></article>`).join('');updateCounts();}
+// Слайдер із шести моделей: ті самі локальні PNG, що в картках та модальних вікнах.
+const heroSlides = [
+  {id:'adventurer',name:'За межами звичного',first:'За межами',accent:'звичного.',category:'ЕКСПЕДИЦІЇ / MARQ GEN 3',lead:'MARQ Adventurer: для тих, хто обирає нові маршрути та відкриття.'},
+  {id:'athlete',name:'Рух до більшого',first:'Рух до',accent:'більшого.',category:'СПОРТ / MARQ GEN 3',lead:'MARQ Athlete: кожен старт починається з амбіцій, підкріплених даними.'},
+  {id:'aviator',name:'Вище горизонту',first:'Вище',accent:'горизонту.',category:'АВІАЦІЯ / MARQ GEN 3',lead:'MARQ Aviator: авіаційні інструменти, точність і характер у кожній деталі.'},
+  {id:'commander',name:'Готовність діяти',first:'Готовність',accent:'діяти.',category:'ТАКТИКА / MARQ GEN 3',lead:'MARQ Commander: спеціалізовані інструменти для складних завдань.'},
+  {id:'diver',name:'Глибше за очікування',first:'Глибше за',accent:'очікування.',category:'ДАЙВІНГ / MARQ GEN 3',lead:'MARQ Diver: технології, що допомагають досліджувати підводний світ.'},
+  {id:'golfer',name:'Точність кожного рішення',first:'Точність кожного',accent:'рішення.',category:'ГОЛЬФ / MARQ GEN 3',lead:'MARQ Golfer: коли кожен удар — продумане рішення.'}
+];
+let heroIndex=0,heroTimer=null,heroPaused=false;
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+function showHeroSlide(index){
+  heroIndex=(index+heroSlides.length)%heroSlides.length;
+  const slide=heroSlides[heroIndex], model=byId(slide.id), stage=$('#hero-stage'), img=$('#hero-watch');
+  $('.hero').classList.add('slide-switching');
+  const nextImg=new Image();nextImg.src=productImage(model);
+  const update=()=>{
+    $('#hero-title').innerHTML=`${slide.first}<br><em>${slide.accent}</em>`;
+    $('.hero .eyebrow span').textContent=slide.category;
+    $('#hero-lead').textContent=slide.lead;
+    img.src=productImage(model); img.alt=`Garmin MARQ ${model.name} (Gen 3)`;
+    stage.setAttribute('aria-label',`Garmin MARQ ${model.name} Gen 3`);
+    $('#stage-caption').innerHTML=`MARQ ${model.name.toUpperCase()} <span>·</span> GEN 3`;
+    $('#slide-counter').textContent=`${String(heroIndex+1).padStart(2,'0')} / 06`;
+    document.querySelectorAll('.slider-dot').forEach((dot,i)=>{
+      dot.classList.toggle('is-active',i===heroIndex);
+      if(i===heroIndex)dot.setAttribute('aria-current','true');else dot.removeAttribute('aria-current');
+    });
+    $('.hero').classList.remove('slide-switching');
+  };
+  if(nextImg.complete)update();else {nextImg.onload=update;nextImg.onerror=update;}
+}
+function stopHeroAuto(){if(heroTimer){clearInterval(heroTimer);heroTimer=null;}}
+function startHeroAuto(){stopHeroAuto();if(heroPaused||reduceMotion.matches||document.hidden||dialog.open)return;heroTimer=setInterval(()=>showHeroSlide(heroIndex+1),6500);}
+const hero=$('.hero');
+hero.addEventListener('mouseenter',stopHeroAuto);hero.addEventListener('mouseleave',startHeroAuto);
+hero.addEventListener('focusin',stopHeroAuto);hero.addEventListener('focusout',e=>{if(!hero.contains(e.relatedTarget))startHeroAuto();});
+document.addEventListener('visibilitychange',()=>{document.hidden?stopHeroAuto():startHeroAuto();});
+reduceMotion.addEventListener('change',startHeroAuto);
+document.querySelectorAll('[data-slide]').forEach(b=>b.addEventListener('click',()=>{showHeroSlide(Number(b.dataset.slide));startHeroAuto();}));
+document.querySelectorAll('[data-slide-direction]').forEach(b=>b.addEventListener('click',()=>{showHeroSlide(heroIndex+Number(b.dataset.slideDirection));startHeroAuto();}));
+$('#slider-toggle').addEventListener('click',e=>{
+  heroPaused=!heroPaused;e.currentTarget.setAttribute('aria-pressed',String(heroPaused));
+  e.currentTarget.setAttribute('aria-label',heroPaused?'Увімкнути автоматичне гортання':'Зупинити автоматичне гортання');
+  e.currentTarget.textContent=heroPaused?'▶':'Ⅱ';heroPaused?stopHeroAuto():startHeroAuto();
+});
+startHeroAuto();
+
+// Без скролу: весь зміст розбитий на окремі екрани із кнопками «Назад»/«Далі».
+let modalPages=[],modalPage=0;
+function openModal(title,kicker,pages){
+  modalTitle.textContent=title;modalKicker.textContent=kicker;
+  modalPages=Array.isArray(pages)?pages:[pages];modalPage=0;
+  modalBody.innerHTML=modalPages.map((content,i)=>`<section class="modal-page${i?'':' is-active'}" data-page="${i}" ${i?'hidden':''}>${content}</section>`).join('');
+  const pager=$('#modal-pager');pager.hidden=modalPages.length<=1;
+  updateModalPager();if(!dialog.open)dialog.showModal();stopHeroAuto();
+}
+function updateModalPager(){
+  modalBody.querySelectorAll('.modal-page').forEach((page,i)=>{page.hidden=i!==modalPage;page.classList.toggle('is-active',i===modalPage);});
+  $('#modal-page-info').textContent=`${modalPage+1} / ${modalPages.length}`;
+  const prev=$('[data-action="modal-prev"]'),next=$('[data-action="modal-next"]');
+  prev.disabled=modalPage===0;next.disabled=modalPage===modalPages.length-1;
+}
+function flipModal(delta){if(modalPage+delta<0||modalPage+delta>=modalPages.length)return;modalPage+=delta;updateModalPager();}
+function closeModal(){if(dialog.open)dialog.close();startHeroAuto();}
+function productModal(id){
+  const m=byId(id);if(!m)return;
+  const pages=[
+   `<div class="product-modal-top"><div class="modal-art"><img src="${productImage(m)}" alt="Garmin MARQ ${m.name} (Gen 3)"></div><div class="product-intro"><h3>Для тих, хто знає свою стихію</h3><p>${m.intro}</p><div class="tag-list"><span class="tag">${m.code}</span><span class="tag">До 18 днів</span><span class="tag">AMOLED 1,4″</span></div><p><strong>Кому підійде:</strong> ${m.audience}.</p><p><strong>MSRP США:</strong> ${m.price}</p></div></div>`,
+   `<h3>Що вирізняє MARQ ${m.name}</h3><div class="feature-list">${m.features.map((f,i)=>`<div class="feature-list-item"><b>0${i+1}</b><span>${f}</span></div>`).join('')}</div><h3>Дизайн моделі</h3><p>${m.style}</p>`,
+   `<h3>Характеристики колекції</h3><div class="spec-grid">${common.map(([k,v])=>`<div><span>${k}</span><strong>${v}</strong></div>`).join('')}</div><p class="muted-note">* Функції зв’язку залежать від регіону, покриття та підписки. <a href="${GARMIN_COLLECTION}" target="_blank" rel="noopener noreferrer">Джерело: Garmin.com ↗</a></p>`
+  ];
+  openModal(`MARQ ${m.name}`,`GEN 3 / ${m.series}`,pages);
+}
+// Тематичні довгі матеріали дробляться на екрани без внутрішньої прокрутки.
+function topicPages(html){
+  const root=document.createElement('div');root.innerHTML=html;
+  const blocks=[];
+  [...root.children].forEach(el=>{
+    if(el.tagName==='UL') [...el.children].forEach(li=>blocks.push(`<div class="topic-point">${li.innerHTML}</div>`));
+    else blocks.push(el.outerHTML);
+  });
+  const isMobile=window.innerWidth<=650, maxChars=isMobile?300:650, maxBlocks=isMobile?3:6;
+  const pages=[];let chunk=[],chars=0;
+  for(const block of blocks){
+    const plain=block.replace(/<[^>]*>/g,'').length;
+    if(chunk.length&&(chars+plain>maxChars||chunk.length>=maxBlocks)){pages.push(chunk.join(''));chunk=[];chars=0;}
+    chunk.push(block);chars+=plain;
+  }
+  if(chunk.length)pages.push(chunk.join(''));
+  return pages.length?pages:['<p>Інформацію буде додано.</p>'];
+}
+function topicModal(id){const t=topics[id];if(t)openModal(t.title,t.kicker,topicPages(t.html));}
+function compareModal(){
+  const selected=preferences.compare.map(byId).filter(Boolean),ms=selected.length?selected:models;
+  const count=window.innerWidth<=650?1:3;
+  const pages=[];
+  for(let i=0;i<ms.length;i+=count){
+    const group=ms.slice(i,i+count);
+    pages.push(`<p class="compare-intro">${selected.length?'Обрані моделі':'Уся колекція'} · Моделі ${i+1}–${i+group.length} із ${ms.length}</p><div class="comparison-cards">${group.map(m=>`<article class="comparison-card"><img src="${productImage(m)}" alt="MARQ ${m.name}"><h3>MARQ ${m.name}</h3><dl><div><dt>Напрям</dt><dd>${m.series}</dd></div><div><dt>Ключові функції</dt><dd>${m.features.slice(0,2).join(' · ')}</dd></div><div><dt>Стиль</dt><dd>${m.style}</dd></div><div><dt>Стартова ціна США</dt><dd>${m.price}</dd></div></dl></article>`).join('')}</div>`);
+  }
+  openModal('Порівняння моделей',selected.length?`${selected.length} ВИБРАНИХ МОДЕЛЕЙ`:'ШІСТЬ МОДЕЛЕЙ',pages);
+}
+function resultMarkup(m){return `<button type="button" class="result-item" data-product="${m.id}"><img src="${productImage(m)}" alt="MARQ ${m.name}"><span><strong>${m.name}</strong><small>${m.series.toLowerCase()}</small></span></button>`;}
+function searchModal(){
+  openModal('Знайти свій MARQ','ПОШУК ЗА НАЗВОЮ АБО ФУНКЦІЄЮ',`<label class="stack" for="model-search">Назва, сфера застосування або функція</label><input class="search-field" id="model-search" type="search" autocomplete="off" placeholder="Наприклад: дайвінг, біг, навігація..."><div class="search-results" id="search-results">${models.map(resultMarkup).join('')}</div>`);
+  const input=$('#model-search');input.focus();input.addEventListener('input',()=>{
+    const q=input.value.trim().toLocaleLowerCase('uk');
+    const matches=models.filter(m=>[m.name,m.subtitle,m.series,m.intro,m.audience,m.style,...m.features].join(' ').toLocaleLowerCase('uk').includes(q));
+    $('#search-results').innerHTML=matches.length?matches.map(resultMarkup).join(''):'<div class="modal-empty">Нічого не знайдено.</div>';
+  });
+}
+function favoritesModal(){const ms=preferences.favorites.map(byId).filter(Boolean);openModal('Ваше обране','ЗБЕРЕЖЕНІ МОДЕЛІ',ms.length?`<p class="muted-note">Збережено в цьому браузері.</p><div class="search-results">${ms.map(resultMarkup).join('')}</div>`:'<div class="modal-empty">Поки порожньо. Натисніть ♡ на картці моделі.</div>');}
 let toastTimeout;
 function toast(text){const el=$('#toast');el.textContent=text;el.classList.add('visible');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('visible'),2300);}
 function toggle(key,id){const set=preferences[key];const i=set.indexOf(id);if(i>=0){set.splice(i,1);toast('Вилучено: MARQ '+byId(id).name);}else{if(key==='compare' && set.length>=4){toast('Для порівняння можна вибрати до 4 моделей');return;}set.push(id);toast((key==='favorites'?'В обраному: ':'Додано до порівняння: ')+'MARQ '+byId(id).name);}save();}
 renderCards();
-document.addEventListener('click',event=>{const b=event.target.closest('button');if(!b)return;if(b.dataset.action==='close'){closeModal();return;}if(b.dataset.action==='compare'){compareModal();return;}if(b.dataset.action==='favorites'){favoritesModal();return;}if(b.dataset.action==='search'){searchModal();return;}if(b.dataset.action==='clear-compare'){preferences.compare=[];save();compareModal();return;}if(b.dataset.favorite){toggle('favorites',b.dataset.favorite);return;}if(b.dataset.compareToggle){toggle('compare',b.dataset.compareToggle);return;}if(b.dataset.product){productModal(b.dataset.product);return;}if(b.dataset.topic){topicModal(b.dataset.topic);return;}});
+document.addEventListener('click',event=>{const b=event.target.closest('button');if(!b)return;if(b.dataset.action==='close'){closeModal();return;}if(b.dataset.action==='modal-prev'){flipModal(-1);return;}if(b.dataset.action==='modal-next'){flipModal(1);return;}if(b.dataset.action==='hero-details'){productModal(heroSlides[heroIndex].id);return;}if(b.dataset.action==='compare'){compareModal();return;}if(b.dataset.action==='favorites'){favoritesModal();return;}if(b.dataset.action==='search'){searchModal();return;}if(b.dataset.action==='clear-compare'){preferences.compare=[];save();compareModal();return;}if(b.dataset.favorite){toggle('favorites',b.dataset.favorite);return;}if(b.dataset.compareToggle){toggle('compare',b.dataset.compareToggle);return;}if(b.dataset.product){productModal(b.dataset.product);return;}if(b.dataset.topic){topicModal(b.dataset.topic);return;}});
 dialog.addEventListener('click',e=>{if(e.target===dialog)closeModal();});
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchModal();}});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchModal();}if(dialog.open&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){if(e.key==='ArrowRight')flipModal(1);if(e.key==='ArrowLeft')flipModal(-1);}});
 const navLinks=document.querySelectorAll('.main-nav a');navLinks.forEach(a=>a.addEventListener('click',()=>{navLinks.forEach(n=>n.classList.remove('is-current'));a.classList.add('is-current');}));
 // Escape закриває модальне вікно навіть тоді, коли фокус у пошуковому полі.
 document.addEventListener('keydown',e=>{if(e.key==='Escape' && dialog.open){e.preventDefault();closeModal();}},true);
