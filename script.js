@@ -74,7 +74,7 @@ const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 function showHeroSlide(index){
   heroIndex=(index+heroSlides.length)%heroSlides.length;
   const currentIndex=heroIndex, requestId=++heroRequest;
-  const slide=heroSlides[currentIndex], model=byId(slide.id), stage=$('#hero-stage'), img=$('#hero-watch');
+  const slide=heroSlides[currentIndex], model=byId(slide.id), stage=$('#hero-stage');
   const requestedSrc=bannerImage(currentIndex);
   $('.hero').classList.add('slide-switching');
   const update=(loadedSrc)=>{
@@ -83,16 +83,9 @@ function showHeroSlide(index){
     $('#hero-title').innerHTML=`${slide.first}<br><em>${slide.accent}</em>`;
     $('.hero .eyebrow span').textContent=slide.category;
     $('#hero-lead').textContent=slide.lead;
-    img.classList.toggle('hero-watch-fallback',loadedSrc!==requestedSrc);
-    img.alt=`Іміджевий банер колекції Garmin MARQ Gen 3, слайд ${currentIndex+1}`;
-    img.onerror=()=>{
-      img.onerror=null;
-      img.classList.add('hero-watch-fallback');
-      img.src=productImage(model);
-    };
-    img.src=loadedSrc;
-    stage.setAttribute('aria-label',`Garmin MARQ ${model.name} Gen 3`);
-    $('#stage-caption').innerHTML=`MARQ ${model.name.toUpperCase()} <span>·</span> GEN 3`;
+    stage.style.backgroundImage=loadedSrc?`url("${loadedSrc}")`:'none';
+    stage.classList.toggle('is-fallback',loadedSrc!==requestedSrc);
+    stage.setAttribute('aria-label',`Іміджевий банер Garmin MARQ ${model.name} Gen 3`);
     $('#slide-counter').textContent=`${String(currentIndex+1).padStart(2,'0')} / 06`;
     document.querySelectorAll('.slider-dot').forEach((dot,i)=>{
       dot.classList.toggle('is-active',i===currentIndex);
@@ -102,7 +95,12 @@ function showHeroSlide(index){
   };
   const preloaded=new Image();
   preloaded.onload=()=>update(requestedSrc);
-  preloaded.onerror=()=>update(productImage(model));
+  preloaded.onerror=()=>{
+    const fallback=new Image();
+    fallback.onload=()=>update(productImage(model));
+    fallback.onerror=()=>update('');
+    fallback.src=productImage(model);
+  };
   preloaded.src=requestedSrc;
   if(preloaded.complete&&preloaded.naturalWidth>0)update(requestedSrc);
 }
@@ -196,5 +194,25 @@ document.addEventListener('click',event=>{const b=event.target.closest('button')
 dialog.addEventListener('click',e=>{if(e.target===dialog)closeModal();});
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchModal();}if(dialog.open&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){if(e.key==='ArrowRight')flipModal(1);if(e.key==='ArrowLeft')flipModal(-1);}});
 const navLinks=document.querySelectorAll('.main-nav a');navLinks.forEach(a=>a.addEventListener('click',()=>{navLinks.forEach(n=>n.classList.remove('is-current'));a.classList.add('is-current');}));
+// Скляна плашка з бургер-меню: працює на комп'ютерах і смартфонах.
+const menuToggle=$('#menu-toggle'), navDropdown=$('#nav-dropdown');
+function setMenuOpen(open, returnFocus=false){
+  navDropdown.hidden=!open;
+  menuToggle.setAttribute('aria-expanded',String(open));
+  menuToggle.setAttribute('aria-label',open?'Закрити меню':'Відкрити меню');
+  menuToggle.classList.toggle('is-open',open);
+  if(!open&&returnFocus)menuToggle.focus();
+}
+menuToggle.addEventListener('click',()=>setMenuOpen(navDropdown.hidden));
+navDropdown.addEventListener('click',e=>{
+  if(e.target.closest('a,button'))setMenuOpen(false);
+});
+document.addEventListener('pointerdown',e=>{
+  if(!navDropdown.hidden&&!e.target.closest('.main-nav'))setMenuOpen(false);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!navDropdown.hidden){e.preventDefault();setMenuOpen(false,true);}
+});
+
 // Escape закриває модальне вікно навіть тоді, коли фокус у пошуковому полі.
 document.addEventListener('keydown',e=>{if(e.key==='Escape' && dialog.open){e.preventDefault();closeModal();}},true);

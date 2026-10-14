@@ -124,142 +124,125 @@ body{background:#0b1015}
 @media(max-width:850px){.hero-stage .hero-watch.hero-watch-fallback{left:4%;width:100%}}
 @media(max-width:650px){.hero-stage .hero-watch.hero-watch-fallback{top:-20%;left:12%;width:78%;height:124%}}
 
-/* === MARQ Gen 3 · Повноширинні банери головного слайдера ===
-   Зображення займає 100% ширини контентної області .site-shell.
-   На десктопі текст накладається справа (моделі на іміджевих фото не перекриваються).
-   На телефонах текст відображається під зображенням. */
+/* === Головний слайдер: WebP як справжнє CSS-фонове зображення. === */
 .hero{
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  grid-template-rows:auto auto auto;
-  min-height:0;
-  padding-top:42px;
-  gap:0;
-  isolation:isolate;
+  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;
+  gap:0;min-height:0;padding-top:38px;isolation:isolate;
 }
 .hero-stage{
-  position:relative;
-  grid-column:1;
-  grid-row:1;
-  z-index:1;
-  width:100%;
-  height:clamp(440px,45vw,610px);
-  min-height:0;
-  overflow:hidden;
-  border-radius:22px;
-  background:linear-gradient(120deg,#1c2836,#0c141c);
-  border:1px solid rgba(167,204,233,.13);
+  position:relative;z-index:1;grid-column:1;grid-row:1;
+  width:100%;height:clamp(480px,46vw,630px);min-height:0;
+  border-radius:22px;overflow:hidden;
+  border:1px solid rgba(166,205,239,.18);
+  background-color:#121d28;
+  background-image:url("assets/adventurer-slider.webp");
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+  box-shadow:0 22px 55px rgba(0,0,0,.20);
 }
-.hero-stage .hero-watch{
-  position:absolute;
-  inset:0;
-  display:block;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center center;
-  transform:none;
-  filter:none;
-  border-radius:0;
+.hero-stage::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(270deg,rgba(8,15,23,.91) 0%,rgba(8,15,23,.73) 28%,rgba(8,15,23,.21) 70%,rgba(8,15,23,.04) 100%);
 }
-/* Градієнт поверх фотографії під текстовим блоком. */
-.hero-stage::after{
-  content:"";
-  position:absolute;
-  z-index:2;
-  inset:0;
-  pointer-events:none;
-  background:linear-gradient(270deg,rgba(10,16,22,.97) 0%,rgba(10,16,22,.86) 24%,rgba(10,16,22,.53) 49%,rgba(10,16,22,.03) 84%);
-}
-/* Колишні кільця, підставка і підсвічування не потрібні для повноформатних фото. */
-.hero-stage .stage-rings,
-.hero-stage .stage-spotlight,
-.hero-stage .pedestal{display:none}
+.hero-stage.is-fallback{background-size:contain;background-position:24% center}
 .hero-aurora{display:none}
 .hero-content{
-  grid-column:1;
-  grid-row:1;
-  justify-self:end;
-  align-self:center;
-  position:relative;
-  z-index:3;
-  width:49%;
-  max-width:580px;
-  padding:34px clamp(22px,3.2vw,48px) 40px 20px;
+  grid-column:1;grid-row:1;justify-self:end;align-self:center;
+  position:relative;z-index:2;width:49%;max-width:610px;
+  padding:40px clamp(20px,3.4vw,52px) 43px 18px;
 }
-.hero-content h1{
-  font-size:clamp(43px,5vw,79px);
-  line-height:1.08;
-  margin:19px 0 20px;
-  letter-spacing:-.055em;
-}
-.hero-content .hero-lead{font-size:clamp(13px,1.15vw,16px);line-height:1.7}
-.hero-slider-controls{
-  grid-column:1;
-  grid-row:2;
-  margin-top:0;
-  padding:19px 0 11px;
-  position:relative;
-  z-index:4;
-}
-.hero-benefits{
-  grid-column:1;
-  grid-row:3;
-  margin:0;
-  padding:19px 0 28px;
-}
-.stage-caption{z-index:3;right:auto;left:26px;bottom:22px}
-/* Коли банер відсутній, резервне PNG займає ліву частину без деформації. */
-.hero-stage .hero-watch.hero-watch-fallback{
-  top:0;
-  left:2%;
-  width:56%;
-  height:100%;
-  object-fit:contain;
-  object-position:center;
-  transform:none;
-  filter:drop-shadow(10px 22px 24px rgba(0,0,0,.48));
-}
-@media(max-width:1050px) and (min-width:851px){
-  .hero-content{width:52%}
-  .hero-content h1{font-size:clamp(40px,5vw,58px)}
-  .hero-ctas{gap:12px}
+.hero-content h1{font-size:clamp(42px,4.8vw,75px);line-height:1.09;margin:18px 0 21px;letter-spacing:-.055em}
+.hero-content .hero-lead{font-size:clamp(13px,1.1vw,16px);line-height:1.7}
+.hero-slider-controls{grid-column:1;grid-row:2;margin:0;padding:19px 0 8px;position:relative;z-index:2}
+.hero-benefits{grid-column:1;grid-row:3;margin:0;padding:19px 0 26px}
+.hero.slide-switching .hero-content{opacity:.55;transition:opacity .18s ease}
+.hero-content{transition:opacity .18s ease}
+@media(min-width:851px) and (max-width:1050px){
+  .hero-content{width:54%}.hero-content h1{font-size:clamp(37px,5vw,60px)}.hero-ctas{gap:13px}
 }
 @media(max-width:850px){
-  .hero{display:flex;flex-direction:column;padding-top:26px}
-  .hero-stage{
-    order:0;
-    flex:0 0 auto;
-    width:100%;
-    height:clamp(295px,56vw,470px);
-    border-radius:19px;
-  }
-  .hero-content{
-    order:1;
-    width:100%;
-    max-width:100%;
-    padding:26px 4px 8px;
-    align-self:stretch;
-  }
-  .hero-stage::after{background:linear-gradient(0deg,rgba(9,15,22,.37),transparent 52%)}
-  .hero-slider-controls{order:2;padding:17px 0 9px}
-  .hero-benefits{order:3;padding:15px 0 25px}
-  .hero-content h1{font-size:clamp(45px,7.2vw,70px)}
-  .hero-content .hero-lead{max-width:640px}
-  .stage-caption{left:16px;bottom:15px}
-  .hero-stage .hero-watch.hero-watch-fallback{left:0;width:100%;height:100%}
+  .hero{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;padding-top:25px}
+  .hero-stage{grid-column:1;grid-row:1;height:clamp(505px,77vw,610px);min-height:0;border-radius:18px}
+  .hero-stage::before{background:linear-gradient(0deg,rgba(8,14,21,.96) 0%,rgba(8,14,21,.73) 37%,rgba(8,14,21,.22) 75%,transparent 100%)}
+  .hero-content{grid-column:1;grid-row:1;align-self:end;justify-self:stretch;width:100%;max-width:none;padding:25px 32px 36px;order:initial}
+  .hero-content h1{font-size:clamp(43px,7vw,61px)}
+  .hero-content .hero-lead{max-width:650px}
+  .hero-slider-controls{grid-column:1;grid-row:2;order:initial;padding:16px 0 8px}
+  .hero-benefits{grid-column:1;grid-row:3;order:initial;margin:0;padding:18px 0 24px}
 }
 @media(max-width:650px){
-  .hero{padding-top:22px}
-  .hero-stage{height:clamp(245px,77vw,380px);border-radius:16px}
-  .hero-content{padding:20px 0 7px}
-  .hero-content h1{font-size:clamp(40px,10.5vw,60px);margin:15px 0 14px}
-  .hero-content .hero-lead{font-size:13px;margin-bottom:20px}
+  .hero{padding-top:19px}
+  .hero-stage{height:clamp(520px,146vw,640px);border-radius:16px;background-position:35% center}
+  .hero-content{padding:24px 19px 30px}
+  .hero-content h1{font-size:clamp(35px,9vw,49px);margin:12px 0 14px;line-height:1.1}
+  .hero-content .hero-lead{font-size:12.5px;line-height:1.55;margin-bottom:18px;max-width:440px}
+  .hero-ctas{gap:12px;flex-wrap:wrap}
+  .hero-ctas .btn{padding:0 18px;min-height:45px}
   .hero-slider-controls{padding:15px 0 5px}
-  .hero-benefits{padding:19px 0 16px}
-  .hero-stage .hero-watch{object-position:center}
 }
 @media(max-width:370px){
-  .hero-stage{height:265px}
-  .hero-content h1{font-size:42px}
+  .hero-stage{height:535px}
+  .hero-content{padding:18px 14px 22px}
+  .hero-content h1{font-size:34px}
+  .hero-content .eyebrow{font-size:9px;letter-spacing:.18em}
+  .hero-ctas .btn-video small{display:none}
 }
+
+/* === Матове скло: бургер у навігаційній плашці незалежно від ширини екрана. === */
+.header-bottom{position:relative;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:14px;min-height:51px}
+.main-nav{
+  position:relative;display:block;flex:0 0 auto;width:auto;overflow:visible;
+  padding:5px;border-radius:100px;
+  background:rgba(238,245,252,.57);border:1px solid rgba(255,255,255,.65);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.57),0 12px 34px rgba(0,0,0,.25);
+  -webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);
+  color:#1a2736;
+}
+.menu-toggle{
+  display:flex;align-items:center;justify-content:center;gap:13px;
+  padding:10px 23px;min-width:158px;min-height:43px;border:0;
+  border-radius:100px;background:rgba(255,255,255,.17);
+  color:#1b2936;font-size:13px;font-weight:800;letter-spacing:.03em;
+}
+.menu-toggle:hover,.menu-toggle.is-open{background:rgba(255,255,255,.38)}
+.burger-lines{display:flex;flex-direction:column;justify-content:center;gap:5px;width:21px;height:20px}
+.burger-lines span{width:100%;height:2px;background:currentColor;border-radius:4px;transform-origin:center;transition:transform .2s,opacity .2s}
+.menu-toggle.is-open .burger-lines span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.menu-toggle.is-open .burger-lines span:nth-child(2){opacity:0}
+.menu-toggle.is-open .burger-lines span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-dropdown{
+  position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);
+  z-index:50;display:flex;flex-direction:column;gap:4px;
+  width:246px;max-width:calc(100vw - 30px);padding:12px;
+  border-radius:21px;border:1px solid rgba(255,255,255,.7);
+  background:rgba(232,240,249,.92);
+  -webkit-backdrop-filter:blur(24px) saturate(130%);backdrop-filter:blur(24px) saturate(130%);
+  box-shadow:0 23px 50px rgba(0,0,0,.33);
+}
+.nav-dropdown[hidden]{display:none!important}
+.nav-dropdown .nav-item{
+  display:flex;align-items:center;justify-content:flex-start;gap:12px;
+  width:100%;min-height:44px;text-align:left;border:0;border-radius:12px;
+  color:#223242;background:transparent;padding:10px 15px;
+  font-size:13px;font-weight:800;white-space:normal;
+}
+.nav-dropdown .nav-item:hover,.nav-dropdown .nav-item.is-current{color:#fff;background:#1f5f99}
+.nav-dropdown .nav-home{display:inline-block;width:17px;height:17px;stroke:currentColor;stroke-width:1.7;fill:none}
+.header-actions{position:absolute;right:0;top:50%;transform:translateY(-50%);display:flex;gap:14px;margin:0}
+@media(max-width:650px){
+  .header-bottom{justify-content:space-between;gap:12px}
+  .main-nav{width:auto;padding:5px;overflow:visible}
+  .menu-toggle{min-width:125px;min-height:41px;padding:9px 17px;gap:11px}
+  .header-actions{position:static;align-self:center;transform:none;gap:9px;margin:0}
+  .header-actions .icon-button{width:30px;height:37px}
+  .header-actions .icon-button svg{height:20px;width:20px}
+  .nav-dropdown{left:0;transform:none;width:232px}
+}
+@media(max-width:360px){
+  .menu-toggle{min-width:113px;padding:9px 13px}
+  .header-actions{gap:5px}
+  .header-actions .icon-button{width:27px}
+}
+@media(prefers-reduced-motion:reduce){.burger-lines span,.hero-content{transition:none!important}}
+
+/* Компактний однорядковий підпис поверх фонового банера на телефоні. */
+@media(max-width:650px){.hero-content .eyebrow i{display:none}.hero-content .eyebrow{font-size:10px;letter-spacing:.16em}}
