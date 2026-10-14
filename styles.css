@@ -246,3 +246,62 @@ body{background:#0b1015}
 
 /* Компактний однорядковий підпис поверх фонового банера на телефоні. */
 @media(max-width:650px){.hero-content .eyebrow i{display:none}.hero-content .eyebrow{font-size:10px;letter-spacing:.16em}}
+
+
+/* 15.10.2026 — підняти фото до логотипа, розмістити бургер поверх фото.
+   Розмітку і сценарії не змінюємо: достатньо замінити styles.css. */
+.site-header {
+  position:relative;
+  z-index:20;
+}
+.brand {
+  margin-bottom:18px;
+}
+/* Навігація не займає окремий вертикальний ряд. */
+.header-bottom {
+  position:absolute;
+  top:calc(100% + 20px);
+  left:clamp(16px,2vw,32px);
+  right:clamp(16px,2vw,32px);
+  z-index:30;
+  width:auto;
+  min-height:44px;
+  pointer-events:none;
+}
+.header-bottom .main-nav,
+.header-bottom .header-actions {
+  pointer-events:auto;
+}
+/* Херо починається відразу після логотипа без верхньої порожньої зони. */
+.hero {
+  padding-top:0;
+}
+.hero-stage {
+  margin-top:0;
+}
+/* У верхній частині фото трішки контрастніше під скляними кнопками. */
+.hero-stage::before {
+  background:linear-gradient(180deg,rgba(6,12,19,.22),transparent 26%),
+             linear-gradient(270deg,rgba(8,15,23,.91) 0%,rgba(8,15,23,.73) 28%,rgba(8,15,23,.21) 70%,rgba(8,15,23,.04) 100%);
+}
+@media(max-width:850px) {
+  .header-bottom {
+    top:calc(100% + 20px);
+    left:clamp(12px,3vw,24px);
+    right:clamp(12px,3vw,24px);
+  }
+  .hero { padding-top:0; }
+  .hero-stage::before {
+    background:linear-gradient(180deg,rgba(6,12,19,.20),transparent 25%),
+               linear-gradient(0deg,rgba(8,14,21,.96) 0%,rgba(8,14,21,.73) 37%,rgba(8,14,21,.22) 75%,transparent 100%);
+  }
+}
+@media(max-width:650px) {
+  .brand { margin-bottom:17px; }
+  .header-bottom {
+    top:calc(100% + 20px);
+    left:clamp(13px,4vw,22px);
+    right:clamp(13px,4vw,22px);
+  }
+  .hero { padding-top:0; }
+}
