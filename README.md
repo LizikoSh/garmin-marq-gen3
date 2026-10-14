@@ -5,28 +5,30 @@
 ## Файли, які потрібно додати або замінити у корені GitHub-репозиторію
 
 - `index.html` — canonical, Open Graph, Twitter Card, JSON-LD URL і шлях першого банера.
-- `script.js` — шість окремих WebP-зображень слайдера, попередні PNG у картках та модальних вікнах без змін.
+- `script.js` — шість окремих WebP-зображень слайдера відповідно до моделей, попередні PNG у картках та модальних вікнах без змін.
 - `styles.css` — банери тепер показуються без нахилу й обрізання (`object-fit: contain`).
 - `sitemap.xml` — карта сайту із канонічною адресою.
 
 `favicon.svg` залишився незмінним і потрібний, лише якщо його немає в репозиторії.
 
-## Шляхи до банерів (зображення не включені в архів)
+## Шляхи до шести банерів (зображення не включені в архів)
 
-| Модель | Файл у папці `assets/` |
-|---|---|
-| Adventurer | `garmin-marq-3-adventurer-banner-slider.webp` |
-| Athlete | `garmin-marq-3-athlete-banner-slider.webp` |
-| Aviator | `garmin-marq-3-aviator-banner-slider.webp` |
-| Commander | `garmin-marq-3-commander-banner-slider.webp` |
-| Diver | `garmin-marq-3-diver-banner-slider.webp` |
-| Golfer | `garmin-marq-3-golfer-banner-slider.webp` |
+Файли лежать у папці `assets/` і відображаються в порядку моделей у слайдері:
 
-Слайдер автоматично перемикає модель кожні 6,5 секунд. Якщо банер відсутній, тимчасово використовується відповідний `*-Photoroom.png`. Назви файлів чутливі до регістру.
+1. `adventurer-slider.webp`
+2. `athlete-slider.webp`
+3. `aviator-slider.webp`
+4. `commander-slider.webp`
+5. `diver-slider.webp`
+6. `golfer-slider.webp`
+
+Зображення годинників у картках і модальних вікнах залишаються PNG `*-Photoroom.png`.
+Інтервал слайдера — 6,5 секунди. Якщо файл відсутній, показується резервний PNG.
+Назви файлів чутливі до регістру.
 
 ## SEO
 
-Для адреси сайту додано `canonical`, `og:url`, `og:image`, `twitter:image`, `CollectionPage.url` та `sitemap.xml`. Зображення соцмереж використовує перший банер Adventurer — файл має існувати за адресою `https://lizikosh.github.io/garmin-marq-gen3/assets/garmin-marq-3-adventurer-banner-slider.webp`.
+Для адреси сайту додано `canonical`, `og:url`, `og:image`, `twitter:image`, `CollectionPage.url` та `sitemap.xml`. Зображення соцмереж використовує перший іміджевий банер — файл має існувати за адресою `https://lizikosh.github.io/garmin-marq-gen3/assets/adventurer-slider.webp`.
 
 `robots.txt` у папці проєкту не доданий: для GitHub Pages у підкаталозі `/garmin-marq-gen3/` пошукові роботи шукають `robots.txt` у корені домену (`https://lizikosh.github.io/robots.txt`), а не у корені репозиторію проєкту.
 

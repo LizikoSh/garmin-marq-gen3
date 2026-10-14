@@ -14,16 +14,17 @@ const imageFiles = {
   golfer: 'golf-Photoroom.png',
 };
 const productImage = model => `assets/${imageFiles[model.id]}`;
-// Банери головного слайдера мають окремі файли. PNG карток і модальних вікон незмінні.
-const bannerImageFiles = {
-  adventurer: 'garmin-marq-3-adventurer-banner-slider.webp',
-  athlete: 'garmin-marq-3-athlete-banner-slider.webp',
-  aviator: 'garmin-marq-3-aviator-banner-slider.webp',
-  commander: 'garmin-marq-3-commander-banner-slider.webp',
-  diver: 'garmin-marq-3-diver-banner-slider.webp',
-  golfer: 'garmin-marq-3-golfer-banner-slider.webp'
-};
-const bannerImage = model => `assets/${bannerImageFiles[model.id]}`;
+// Окремі іміджеві банери в порядку слайдів: Adventurer, Athlete,
+// Aviator, Commander, Diver, Golfer. PNG карток та модальних вікон не змінюємо.
+const bannerImageFiles = [
+  'adventurer-slider.webp',
+  'athlete-slider.webp',
+  'aviator-slider.webp',
+  'commander-slider.webp',
+  'diver-slider.webp',
+  'golfer-slider.webp'
+];
+const bannerImage = slideIndex => `assets/${bannerImageFiles[slideIndex]}`;
 const models = [
   {id:'adventurer', name:'Adventurer', subtitle:'Для відкриттів і нових маршрутів', series:'ЕКСПЕДИЦІЇ', code:'010-04549-00', glow:'#6889ad35', intro:'Преміальний інструмент для тих, хто завжди шукає наступний маршрут: від міських подорожей до складних гірських стежок.', style:'Повнозерниста італійська шкіра, керамічний безель з компасними позначками на 360°.', features:['Багатошарова картографія й навігація','Компасні позначки на безелі','ClimbPro: підйоми на маршруті без обов’язкового попереднього планування','Герметичні кнопки й преміальні матеріали'], audience:'Мандрівникам, дослідникам, шанувальникам outdoor', price:'$2 700'},
   {id:'athlete', name:'Athlete', subtitle:'Для нових спортивних вершин', series:'СПОРТ', code:'010-04549-10', glow:'#5e90ba39', intro:'Спортивний характер MARQ: інструменти для тренувань, витривалості, аналізу прогресу та підготовки до наступного старту.', style:'Силіконовий ремінець, керамічний безель із позначенням VO₂ max.', features:['Поглиблені показники витривалості','Running Economy: ефективність бігу','Аналітика тренувань та відновлення','Спортивний силіконовий ремінець'], audience:'Бігунам, спортсменам на витривалість і мультиспортсменам', price:'$2 500'},
@@ -74,7 +75,7 @@ function showHeroSlide(index){
   heroIndex=(index+heroSlides.length)%heroSlides.length;
   const currentIndex=heroIndex, requestId=++heroRequest;
   const slide=heroSlides[currentIndex], model=byId(slide.id), stage=$('#hero-stage'), img=$('#hero-watch');
-  const requestedSrc=bannerImage(model);
+  const requestedSrc=bannerImage(currentIndex);
   $('.hero').classList.add('slide-switching');
   const update=(loadedSrc)=>{
     // Застаріле асинхронне завантаження не повинно замінити новий слайд.
@@ -83,7 +84,7 @@ function showHeroSlide(index){
     $('.hero .eyebrow span').textContent=slide.category;
     $('#hero-lead').textContent=slide.lead;
     img.classList.toggle('hero-watch-fallback',loadedSrc!==requestedSrc);
-    img.alt=`Банер Garmin MARQ ${model.name} (Gen 3)`;
+    img.alt=`Іміджевий банер колекції Garmin MARQ Gen 3, слайд ${currentIndex+1}`;
     img.onerror=()=>{
       img.onerror=null;
       img.classList.add('hero-watch-fallback');
